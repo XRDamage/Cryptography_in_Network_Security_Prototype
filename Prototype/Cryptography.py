@@ -46,7 +46,7 @@ class Cryptography:
         with open(publicKey) as f:
             rkey = rsa.PublicKey.load_pkcs1(f.read())
         # Encrypting the data using public key
-        encData = rsa.encrypt(data.encode(), rkey)
+        encData = rsa.encrypt(data, rkey)
 
         # Encryptiong using 3DES
         with open("3DES.pem", "rb") as f:
@@ -79,7 +79,7 @@ class Cryptography:
             rkey = rsa.PrivateKey.load_pkcs1(f.read())
         # Decryptign the data using private key
         plainData = rsa.decrypt(decData, rkey)
-        return plainData.decode()
+        return plainData
 
     
     def hash(data, privateKey):
