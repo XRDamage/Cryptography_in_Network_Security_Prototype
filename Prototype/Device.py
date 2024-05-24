@@ -2,9 +2,10 @@ from Cryptography import *
 from DataPacket import *
 
 class Device:
-    def __init__(self, securityLevel, encryptionKey):
+    def __init__(self, name, securityLevel, encryptionKey):
         self.securityLevel = securityLevel
         self.encryptionKey = encryptionKey
+        self.name = name
         self.completeData = None
 
     def negotiateKeyLevel(self, otherDevice):
@@ -12,10 +13,10 @@ class Device:
 
 
     def sendData(self, data, otherDevice):
-        # Encrypting data for transfer
+        # Encrypting and hashing data for transfer
         encData = Cryptography.asymmetricEncryption(data, self.negotiateKeyLevel(otherDevice))
         hashValue = Cryptography.hash(encData, f"private{self.securityLevel}.pem")
-        
+        # Sending data
         packet = DataPacket(encData, hashValue)
         otherDevice.receiveData(packet, self)
         
@@ -32,11 +33,9 @@ class Device:
         if not dataPacket.checkSignature(otherDevice.encryptionKey):
             print("Signiture was not verified!")
         else:
-            print("Verified and recieved")
-
-        print(data)
+            print(f"Verified and recieved from {otherDevice.name}")
         
-
+        print(data)
         # For the purpose of the project, the sending and recieving 
         # will be done by calling the different class methods.
         # In a network , the sending and recieving will be done
