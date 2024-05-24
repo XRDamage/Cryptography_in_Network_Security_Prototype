@@ -18,6 +18,7 @@ class Device:
             for batch in batches:
                 # Encrypting and hashing data for transfer
                 encData = Cryptography.asymmetricEncryption(batch, self.negotiateKeyLevel(otherDevice))
+                print(encData)
                 hashValue = Cryptography.hash(encData, f"private{self.securityLevel}.pem")
                 # Sending data
                 packet = DataPacket(encData, hashValue)
