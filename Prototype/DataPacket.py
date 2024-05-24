@@ -12,6 +12,6 @@ class DataPacekt:
         # Verifying signiture of sender
         try:
             rsa.verify(self.encryptedData, signature, key) == "SHA-256"
-            return "Valid"
+            return True
         except:
-            return "Invalid"
+            return False

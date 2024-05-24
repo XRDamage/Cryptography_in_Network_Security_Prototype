@@ -3,16 +3,8 @@ from DataPacket import *
 from Cryptography import *
 from KeyGenerator import *
 
-message = "Xavier Ramage"
-encData = Cryptography.asymmetricEncryption(message, "public4.pem")
-hashValue = Cryptography.hash(encData, "private4.pem")
-packet = DataPacekt(encData, hashValue)
-decData = Cryptography.asymmetricDecryption(encData, "private4.pem")
+device1 = Device(1, "public1.pem")
+device2 = Device(2, "public2.pem")
 
-print()
-print(encData)
-print()
-print(packet.checkSignature(hashValue, "public4.pem"))
-print()
-print(decData)
-print()
+message = "Hello"
+device1.sendData(message, device2)
