@@ -154,7 +154,7 @@ class DataShare(MDApp):
         self.device_name = self.device_name_field.text
         self.security_level = self.security_level_field.text
         self.register_dialog.dismiss()
-        Device.addDeviceDB(self.device_name, self.security_level)
+        print(f"Device Name: {self.device_name}, Security Level: {self.security_level}")
     
     def close_register_dialog(self, *args):
         self.register_dialog.dismiss()

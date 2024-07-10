@@ -20,19 +20,25 @@ class KeyGenerator:
         print("Secret key created successfully!")
     
     
-    def generateAsymKeys():
+    def generateAsymKeys(level):
+        if int(level) == 1:
+            size = 2048
+        elif int(level) == 2:
+            size =  3072
+        elif int(level) == 3:
+            size = 4096
+        else:
+            return None
         # Generating key-pairs
-        pubKey, privKey = rsa.newkeys(1024)
-
-        # Save public key to PEM file
-        with open("public1.pem", "wb") as f:
-            f.write(pubKey.save_pkcs1("PEM"))    
-        print("Public key created successfully!")
+        pubKey, privKey = rsa.newkeys(size)
 
         # Save private key to PEM file
-        with open("private1.pem", "wb") as f:
+        with open("private.pem", "wb") as f:
             f.write(privKey.save_pkcs1("PEM"))
         print("Private key created successfully!")
+
+        # Returning key to save in database
+        return pubKey.save_pkcs1("PEM")
 
     
     def generateDES_Key():
