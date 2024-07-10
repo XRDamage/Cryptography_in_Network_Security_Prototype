@@ -20,7 +20,7 @@ class Cryptography:
         fernet = Fernet(key)
 
         # Encrypting data and returning encrypted data
-        return fernet.encrypt(data.encode())
+        return fernet.encrypt(data)
 
     
     def symmetricDecryption(data):
@@ -38,7 +38,7 @@ class Cryptography:
 
         # Decrypting data and returning decrypted data
         code = fernet.decrypt(data)
-        return code.decode()
+        return code
 
     
     def asymmetricEncryption(data, publicKey):
