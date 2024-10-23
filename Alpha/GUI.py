@@ -8,6 +8,7 @@ from kivymd.uix.dialog import MDDialog
 from kivymd.uix.label import MDLabel
 from kivymd.uix.toolbar import MDTopAppBar
 from kivy.uix.widget import Widget
+import threading
 
 from Device import *
 from KeyGenerator import *
@@ -28,6 +29,7 @@ class DataShare(MDApp):
         self.selected_file_path = None
         self.device_name = None
         self.security_level = None
+        self.recipient = None
         
         layout = MDBoxLayout(orientation='vertical', padding=10, spacing=10)
         
@@ -91,8 +93,8 @@ class DataShare(MDApp):
     def show_confirmation_dialog(self):
         if not self.dialog:
             self.dialog = MDDialog(
-                title="File Selected",
-                text=f"Selected file: {self.selected_file_path}",
+                title="Success",
+                text="",
                 buttons=[
                     MDRaisedButton(
                         text="OK",
@@ -100,7 +102,7 @@ class DataShare(MDApp):
                     )
                 ]
             )
-        self.dialog.text = f"Selected file: {self.selected_file_path}" 
+        self.dialog.text = "Action completed successfully"
         self.dialog.open()
     
     def close_dialog(self, *args):
@@ -109,9 +111,9 @@ class DataShare(MDApp):
     def send_message(self, *args):
         message = self.text_field.text
         if self.selected_file_path:
-            message += f"\nAttached file: {self.selected_file_path}"
+            device1 = Device()
+            device1.sendFile(self.selected_file_path, "Vivobook", "localhost")
         
-        self.received_label.text = f"Sent message: {message}"
         self.text_field.text = ""
         self.selected_file_path = None
     
@@ -154,10 +156,19 @@ class DataShare(MDApp):
         self.device_name = self.device_name_field.text
         self.security_level = self.security_level_field.text
         self.register_dialog.dismiss()
-        print(f"Device Name: {self.device_name}, Security Level: {self.security_level}")
+        Device.addDeviceDB(self.device_name, self.security_level)
+        self.show_confirmation_dialog()
     
     def close_register_dialog(self, *args):
         self.register_dialog.dismiss()
+
+    def start_receiving(self):
+        receive_thread = threading.Thread(target=self.receiveData)
+        receive_thread.daemon = True  # Daemonize the thread so it stops when the main thread stops
+        receive_thread.start()
+
+    def receiveData():
+        Device.receiveData()
     
 if __name__ == '__main__':
     DataShare().run()
